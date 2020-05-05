@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./styles.css";
 import { usePosition } from "./usePosition";
+require("dotenv").config();
 
 const getURL = ({ lat, lon }) => {
-  const APIKEY = "855a31456424531bb25c7386ba0f3978";
-  return `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKEY}`;
+  return `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.WEATHER_APP_APIKEY}`;
 };
 
 export default function App() {
