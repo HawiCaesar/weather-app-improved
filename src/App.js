@@ -4,7 +4,7 @@ import "./tailwind.generated.css";
 import { usePosition } from "./usePosition";
 
 const getURL = ({ lat, lon }) => {
-  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/3hourly?lang=en&lon=${lon}&lat=${lat}`;
+  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/hourly?lang=en&lon=${lon}&lat=${lat}`;
 };
 
 export default function App() {
@@ -33,28 +33,23 @@ export default function App() {
   }
 
   if (weatherData) {
-    let currentWeather = weatherData.data[0].weather;
+    let currentWeather = weatherData.data[0];
     return (
       <div className="App">
         <h1 className="text-5xl text-black-700 leading-tight">Weather App</h1>
         <div className="max-w-md mx-auto flex p-6 bg-gray-100 mt-10 rounded-lg shadow-xl content-center">
-          <div className="mx-20 pt-1 content-center">
-            <h2 className="text-2xl text-black-700 leading-tight">
-              {currentWeather.description}
-            </h2>
+          <div className="mx-auto pt-1 content-center">
             <img
-              src={`https://www.weatherbit.io/static/img/icons/${currentWeather.icon}.png`}
+              src={`https://www.weatherbit.io/static/img/icons/${currentWeather.weather.icon}.png`}
               height="60"
               width="60"
               alt={currentWeather.description}
               className="my-0 mx-auto"
             />
-            {/* <h1 className="text-2xl text-blue-700 leading-tight">
-              Tailwind and Create React App
-            </h1>
-            <p className="text-base text-gray-700 leading-normal">
-              Building apps together
-            </p> */}
+            <h2 className="w-64 text-2xl text-black-700 leading-tight">
+              {currentWeather.temp} &#8451;
+            </h2>
+            <div className="my-3">{currentWeather.weather.description}</div>
           </div>
         </div>
       </div>
