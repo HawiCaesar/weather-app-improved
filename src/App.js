@@ -2,16 +2,22 @@ import React, { useState } from "react";
 import "./styles.css";
 import "./tailwind.generated.css";
 import { usePosition } from "./usePosition";
+//import { getCurrentDateTime } from './utils/dateUtils'
 
-const getURL = ({ lat, lon }) => {
+const getForecast = (lat, lon) => {
   return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/hourly?lang=en&lon=${lon}&lat=${lat}`;
+};
+
+const getCurrentWeather = (lat, lon) => {
+  console.log(lat, lon, "####");
+  return `https://weatherbit-v1-mashape.p.rapidapi.com/current?lang=en&lon=${lon}&lat=${lat}`;
 };
 
 export default function App() {
   const { latitude, longitude, error } = usePosition();
   const [weatherData, setWeatherData] = useState(null);
-  const getWeather = async (lat, lon) => {
-    const response = await fetch(getURL({ lat, lon }), {
+  const getWeather = async (url) => {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "x-rapidapi-host": "weatherbit-v1-mashape.p.rapidapi.com",
@@ -26,14 +32,20 @@ export default function App() {
   }
 
   if (latitude && longitude && weatherData === null) {
-    getWeather(latitude, longitude).then((data) => {
+    getWeather(getCurrentWeather(latitude, longitude)).then((data) => {
       console.log("HERE WE ARE", data);
       setWeatherData(data);
+    });
+
+    getWeather(getForecast(latitude, longitude)).then((data) => {
+      console.log("Forecast", data);
+      //setWeatherData(data);
     });
   }
 
   if (weatherData) {
     let currentWeather = weatherData.data[0];
+    //console.log(getCurrentDateTime())
     return (
       <div className="App">
         <h1 className="text-5xl text-black-700 leading-tight">Weather App</h1>
