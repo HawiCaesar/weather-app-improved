@@ -32,15 +32,13 @@ export default function App() {
   }
 
   if (latitude && longitude && weatherData === null) {
-    getWeather(getCurrentWeather(latitude, longitude)).then((data) => {
-      console.log("HERE WE ARE", data);
-      setWeatherData(data);
-    });
-
-    getWeather(getForecast(latitude, longitude)).then((data) => {
-      console.log("Forecast", data);
-      //setWeatherData(data);
-    });
+    getWeather(getCurrentWeather(latitude, longitude)).then(
+      (currentWeather) => {
+        getWeather(getForecast(latitude, longitude)).then((forecastWeather) => {
+          setWeatherData(currentWeather);
+        });
+      }
+    );
   }
 
   if (weatherData) {
