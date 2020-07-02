@@ -1,27 +1,49 @@
-const asyncGetCurrentPosition = (options) =>
+export const asyncGetCurrentPosition = (options) =>
   new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 
 const getCurrentWeatherFromAPI = (lat, lon) => {
-  return `https://weatherbit-v1-mashape.p.rapidapi.com/current?lang=en&lon=${lon}&lat=${lat}`;
+  //first index is the current weather
+  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/hourly?lang=en&lon=${lon}&lat=${lat}`;
 };
 
-export const getCurrentWeatherFromCoordinates = async () => {
-  if (navigator.geolocation) {
-    let {
-      coords: { latitude, longitude },
-    } = await asyncGetCurrentPosition();
+const getForecastFromAPI = (lat, lon) => {
+  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily?lang=en&lon=${lon}&lat=${lat}`;
+};
 
-    const response = await fetch(getCurrentWeatherFromAPI(latitude, longitude), {
-      method: "GET",
-      headers: {
-        "x-rapidapi-host": "weatherbit-v1-mashape.p.rapidapi.com",
-        "x-rapidapi-key": process.env.REACT_APP_WEATHER_APP_APIKEY,
-      },
-    });
-    return response.ok ? response.json() : Promise.reject({ error: 500 });
-  } else {
-    return "ERROR";
-  }
+const methodsAndOptions = {
+  method: "GET",
+  headers: {
+    "x-rapidapi-host": "weatherbit-v1-mashape.p.rapidapi.com",
+    "x-rapidapi-key": process.env.REACT_APP_WEATHER_APP_APIKEY,
+  },
+};
+
+export const getCurrentWeather = async (latitude, longitude) => {
+  const response = await fetch(
+    getCurrentWeatherFromAPI(latitude, longitude),
+    methodsAndOptions
+  );
+
+  return response.ok
+    ? response.json()
+    : Promise.reject({
+        error: 500,
+        message: "There was an error fetching the current weather",
+      });
+};
+
+export const getForecastWeather = async (latitude, longitude) => {
+  const response = await fetch(
+    getForecastFromAPI(latitude, longitude),
+    methodsAndOptions
+  );
+
+  return response.ok
+    ? response.json()
+    : Promise.reject({
+        error: 500,
+        message: "There was an error fetching the current weather",
+      });
 };

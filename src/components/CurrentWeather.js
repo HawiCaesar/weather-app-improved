@@ -15,6 +15,8 @@ class CurrentWeather extends React.Component {
 
     const currentWeather = store.currentWeather.data[0];
 
+    console.log(store.forecastWeather, '========')
+
     return (
       <div className="App">
         <h1 className="text-5xl text-black-700 leading-tight">Weather App</h1>
