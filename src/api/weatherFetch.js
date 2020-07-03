@@ -5,7 +5,7 @@ export const asyncGetCurrentPosition = (options) =>
 
 const getCurrentWeatherFromAPI = (lat, lon) => {
   //first index is the current weather
-  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/hourly?lang=en&lon=${lon}&lat=${lat}`;
+  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/hourly?lang=en&lon=${lon}&lat=${lat}&hours=24`;
 };
 
 const getForecastFromAPI = (lat, lon) => {
