@@ -29,6 +29,16 @@ export const getCurrentDateTime = () => {
   return [date.getFullYear() + "-" + month + "-" + numericalDay, time];
 };
 
+export const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 export const timeBlocks = {
   "00:00:00": "00:00:00",
   "03:00:00": "03:00:00",

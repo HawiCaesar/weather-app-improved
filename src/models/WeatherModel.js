@@ -2,9 +2,10 @@ import { observable, action } from "mobx";
 import {
   getCurrentWeather,
   getForecastWeather,
+  getThreeHourlyForecast,
   asyncGetCurrentPosition,
 } from "../api/weatherFetch";
-import { timeBlocks, getCurrentDateTime } from "../utils/dateUtils";
+import { timeBlocks, getCurrentDateTime, days } from "../utils/dateUtils";
 
 export default class WeatherModel {
   @observable currentWeather;
@@ -13,14 +14,23 @@ export default class WeatherModel {
   @observable loading = true;
   @observable weatherError;
 
-  formatForThreeHourlyToday = (currentWeatherData) => {
+  formatForThreeHourlyToday = (weatherData) => {
     const today = getCurrentDateTime()[0];
-    return currentWeatherData.data.filter((dataPoint) => {
+    return weatherData.data.filter((dataPoint) => {
       let dateTime = dataPoint.timestamp_local.split("T");
 
       if (timeBlocks[dateTime[1]] && dateTime[0] === today) {
         return dataPoint;
       }
+    });
+  };
+
+  formatForFiveDays = (weatherData) => {
+    weatherData.data.shift();
+    return weatherData.data.map((dataPoint) => {
+      let date = new Date(dataPoint.datetime);
+      dataPoint.dayOfTheWeek = days[date.getDay()];
+      return dataPoint;
     });
   };
 
@@ -32,15 +42,22 @@ export default class WeatherModel {
 
       getCurrentWeather(latitude, longitude)
         .then((currentWeatherData) => {
-          getForecastWeather(latitude, longitude).then(
-            (forecastWeatherData) => {
-              this.weatherThreeHourlyToday = this.formatForThreeHourlyToday(
-                currentWeatherData
-              );
-              this.currentWeather = currentWeatherData.data[0];
-              this.forecastWeather = forecastWeatherData;
+          getThreeHourlyForecast(latitude, longitude).then(
+            (threeHourForecast) => {
+              getForecastWeather(latitude, longitude).then(
+                (forecastWeatherData) => {
+                  this.currentWeather = currentWeatherData.data[0];
+                  this.weatherThreeHourlyToday = this.formatForThreeHourlyToday(
+                    threeHourForecast
+                  );
 
-              this.loading = false;
+                  this.forecastWeather = this.formatForFiveDays(
+                    forecastWeatherData
+                  );
+
+                  this.loading = false;
+                }
+              );
             }
           );
         })

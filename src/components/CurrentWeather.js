@@ -13,13 +13,14 @@ class CurrentWeather extends React.Component {
       return <img src={Spin} alt="loading" className="my-0 mx-auto" />;
     }
 
-    const currentWeather = store.currentWeather;
+    const { currentWeather, weatherThreeHourlyToday, forecastWeather } = store;
 
     return (
       <div className="App">
         <h1 className="text-5xl text-black-700 leading-tight">Weather App</h1>
         <div className="max-w-md mx-auto flex p-6 bg-gray-100 mt-10 rounded-lg shadow-xl content-center">
           <div className="mx-auto pt-1 content-center">
+            <div className="my-3">Now</div>
             <img
               src={`https://www.weatherbit.io/static/img/icons/${currentWeather.weather.icon}.png`}
               height="60"
@@ -35,12 +36,40 @@ class CurrentWeather extends React.Component {
         </div>
 
         <br />
-
+        {weatherThreeHourlyToday.length ? (
+          <React.Fragment>
+            <h3 className="text-2xl text-black-700 leading-tight">
+              3 Hour forecast today
+            </h3>
+            <div className="flex flex-row bg-gray-200 mx-32">
+              {weatherThreeHourlyToday.map((weatherPoint, index) => (
+                <div
+                  className="text-gray-700 text-center bg-gray-100 px-4 py-2 m-2"
+                  key={index}
+                >
+                  <img
+                    src={`https://www.weatherbit.io/static/img/icons/${weatherPoint.weather.icon}.png`}
+                    height="60"
+                    width="60"
+                    alt={weatherPoint.description}
+                    className="my-0 mx-auto"
+                  />
+                  <h2 className="w-64 text-2xl text-black-700 leading-tight">
+                    {weatherPoint.temp} &#8451;
+                  </h2>
+                  <div className="my-3">{weatherPoint.weather.description}</div>
+                </div>
+              ))}
+            </div>
+          </React.Fragment>
+        ) : (
+          ""
+        )}
         <h3 className="text-2xl text-black-700 leading-tight">
-          3 Hour forecast today
+          5 day forecast
         </h3>
-        <div className="flex flex-row bg-gray-200 mx-32">
-          {store.weatherThreeHourlyToday.map((weatherPoint, index) => (
+        <div className="flex flex-wrap flex-row bg-gray-200 mx-32">
+          {forecastWeather.map((weatherPoint, index) => (
             <div
               className="text-gray-700 text-center bg-gray-100 px-4 py-2 m-2"
               key={index}
@@ -52,8 +81,14 @@ class CurrentWeather extends React.Component {
                 alt={weatherPoint.description}
                 className="my-0 mx-auto"
               />
-              <h2 className="w-64 text-2xl text-black-700 leading-tight">
-                {weatherPoint.temp} &#8451;
+              <h2 className="w-64 my-4 text-lg text-black-700 leading-tight">
+                {weatherPoint.dayOfTheWeek}
+              </h2>
+              <h2 className="w-64 text-base text-black-700 leading-tight">
+                High: {weatherPoint.max_temp} &#8451;
+              </h2>
+              <h2 className="w-64 text-base text-black-700 leading-tight">
+                Low: {weatherPoint.min_temp} &#8451;
               </h2>
               <div className="my-3">{weatherPoint.weather.description}</div>
             </div>

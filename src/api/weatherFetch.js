@@ -3,13 +3,18 @@ export const asyncGetCurrentPosition = (options) =>
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 
-const getCurrentWeatherFromAPI = (lat, lon) => {
+const getThreeHourlyForecastFromAPI = (lat, lon) => {
   //first index is the current weather
   return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/hourly?lang=en&lon=${lon}&lat=${lat}&hours=24`;
 };
 
 const getForecastFromAPI = (lat, lon) => {
-  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily?lang=en&lon=${lon}&lat=${lat}`;
+  // 6 days as the first data point is the current day
+  return `https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily?lang=en&lon=${lon}&lat=${lat}&days=6`;
+};
+
+const getCurrentWeatherFromAPI = (lat, lon) => {
+  return `https://weatherbit-v1-mashape.p.rapidapi.com/current?lang=en&lon=${lon}&lat=${lat}`;
 };
 
 const methodsAndOptions = {
@@ -20,9 +25,9 @@ const methodsAndOptions = {
   },
 };
 
-export const getCurrentWeather = async (latitude, longitude) => {
+export const getThreeHourlyForecast = async (latitude, longitude) => {
   const response = await fetch(
-    getCurrentWeatherFromAPI(latitude, longitude),
+    getThreeHourlyForecastFromAPI(latitude, longitude),
     methodsAndOptions
   );
 
@@ -30,13 +35,27 @@ export const getCurrentWeather = async (latitude, longitude) => {
     ? response.json()
     : Promise.reject({
         error: 500,
-        message: "There was an error fetching the current weather",
+        message: "There was an error fetching three hourly forecast weather",
       });
 };
 
 export const getForecastWeather = async (latitude, longitude) => {
   const response = await fetch(
     getForecastFromAPI(latitude, longitude),
+    methodsAndOptions
+  );
+
+  return response.ok
+    ? response.json()
+    : Promise.reject({
+        error: 500,
+        message: "There was an error fetching 2 day forecast weather",
+      });
+};
+
+export const getCurrentWeather = async (latitude, longitude) => {
+  const response = await fetch(
+    getCurrentWeatherFromAPI(latitude, longitude),
     methodsAndOptions
   );
 
