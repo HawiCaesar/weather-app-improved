@@ -19,9 +19,10 @@ export default class WeatherModel {
     return weatherData.data.filter((dataPoint) => {
       let dateTime = dataPoint.timestamp_local.split("T");
 
-      if (timeBlocks[dateTime[1]] && dateTime[0] === today) {
-        return dataPoint;
-      }
+      return timeBlocks[dateTime[1]] && dateTime[0] === today;
+    }).map((dataPoint) => {
+      dataPoint.weatherAt = dataPoint.timestamp_local.split("T")[1]
+      return dataPoint
     });
   };
 

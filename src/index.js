@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 
-import { CurrentWeather } from "./components/CurrentWeather";
+import { Weather } from "./components/Weather";
 import WeatherModel from "./models/WeatherModel";
 
 const store = new WeatherModel();
@@ -11,7 +11,7 @@ store.load()
 const rootElement = document.getElementById("root");
 render(
   <div>
-    <CurrentWeather store={store} />
+    <Weather store={store} />
   </div>,
   rootElement
 );
