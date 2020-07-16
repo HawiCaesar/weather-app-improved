@@ -20,7 +20,7 @@ class Weather extends React.Component {
     return (
       <div className="App">
         <h1 className="text-5xl text-black-700 leading-tight">Weather App</h1>
-        <div className="max-w-md mx-auto flex p-6 bg-gray-100 mt-10 rounded-lg shadow-xl content-center">
+        <div className="max-w-md mx-auto flex p-6 bg-gray-100 mt-10 rounded-lg content-center">
           <div className="mx-auto pt-1 content-center">
             <div className="my-3">Now</div>
             <img
