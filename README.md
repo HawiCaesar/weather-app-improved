@@ -12,7 +12,7 @@
 
 - clone / download repo
 - npm install
-- npm start - The application will start on https://localhost:3000
+- npm start - The application will start on http://localhost:3000
 
 The browser will ask to use your location. Click Allow depending on your browser request.
 
